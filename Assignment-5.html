@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Calendar App</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            transition: background-color 0.5s;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        select, button {
+            padding: 8px;
+            margin: 5px;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            width: 40px;
+        }
+
+        th {
+            background-color: lightgray;
+        }
+
+        td:hover {
+            background-color: yellow; /* OnMouse Hover */
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body onload="changeBackground()">
+
+    <h2>Calendar Web Application</h2>
+
+    <div class="container">
+
+        <!-- Month Dropdown -->
+        <select id="month">
+            <option value="">Select Month</option>
+            <option value="0">January</option>
+            <option value="1">February</option>
+            <option value="2">March</option>
+            <option value="3">April</option>
+            <option value="4">May</option>
+            <option value="5">June</option>
+            <option value="6">July</option>
+            <option value="7">August</option>
+            <option value="8">September</option>
+            <option value="9">October</option>
+            <option value="10">November</option>
+            <option value="11">December</option>
+        </select>
+
+        <!-- Year Dropdown -->
+        <select id="year">
+            <option value="">Select Year</option>
+            <script>
+                for (let y = 2020; y <= 2030; y++) {
+                    document.write("<option value='" + y + "'>" + y + "</option>");
+                }
+            </script>
+        </select>
+
+        <br>
+
+        <button onclick="validateAndShow()">Show Calendar</button>
+        <button onclick="changeBackground()">Change Background</button>
+
+        <div id="calendar"></div>
+
+    </div>
+
+<script>
+
+    // Background color change
+    function changeBackground() {
+        const colors = ["#f8c8dc", "#c8f8dc", "#c8dcf8", "#f8f3c8", "#e0c8f8"];
+        let randomColor = colors[Math.floor(Math.random() * colors.length)];
+        document.body.style.backgroundColor = randomColor;
+    }
+
+    // Validation + Calendar
+    function validateAndShow() {
+        let month = document.getElementById("month").value;
+        let year = document.getElementById("year").value;
+
+        if (month === "" || year === "") {
+            alert("Please select both Month and Year!");
+            return;
+        }
+
+        generateCalendar(month, year);
+    }
+
+    function generateCalendar(month, year) {
+
+        let firstDay = new Date(year, month).getDay();
+        let daysInMonth = new Date(year, parseInt(month) + 1, 0).getDate();
+
+        let table = "<table>";
+        table += "<tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr><tr>";
+
+        for (let i = 0; i < firstDay; i++) {
+            table += "<td></td>";
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            if ((day + firstDay - 1) % 7 === 0 && day !== 1) {
+                table += "</tr><tr>";
+            }
+            table += "<td>" + day + "</td>";
+        }
+
+        table += "</tr></table>";
+
+        document.getElementById("calendar").innerHTML = table;
+    }
+
+</script>
+
+</body>
+</html>
